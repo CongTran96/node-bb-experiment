@@ -90,6 +90,10 @@ function groupRoutes(app, middleware, controllers) {
 	setupPageRoute(app, '/groups/:slug/members', middleware, middlewares, controllers.groups.members);
 }
 
+function staticRouters(app, middleware, controllers) {
+	setupPageRoute(app, '/static/page', middleware, [], controllers.statics.pages.staticPage);
+}
+
 module.exports = function (app, middleware, callback) {
 	const router = express.Router();
 	router.render = function () {
@@ -139,6 +143,9 @@ function addCoreRoutes(app, router, middleware, callback) {
 	accountRoutes(router, middleware, controllers);
 	userRoutes(router, middleware, controllers);
 	groupRoutes(router, middleware, controllers);
+
+	// custom routers
+	staticRouters(router, middleware, controllers);
 
 	var relativePath = nconf.get('relative_path');
 	app.use(relativePath || '/', router);
